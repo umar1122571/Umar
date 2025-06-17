@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoIDX Signals Binomo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(to bottom, #eeeeee, #cccccc);
+            color: #333333;
+        }
+        #forecast {
+            font-size: 1.8em; /* Reduced from 2.5em */
+            margin: 20px;
+            color: #000000; /* Changed text color to black */
+            font-weight: bold; /* Make text bolder */
+        }
+        .up {
+            color: #008000; /* Dark green for better visibility */
+        }
+        .down {
+            color: #cc0000; /* Dark red for better visibility */
+        }
+        button {
+            font-size: 1em; /* Reduced from 1.2em */
+            padding: 10px 20px; /* Adjusted padding for balance */
+            cursor: pointer;
+            background-color: #555555;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            margin: 20px auto; /* Center the button horizontally */
+            transition: background-color 0.3s ease;
+            width: 150px; /* Set a specific width */
+        }
+        button:hover {
+            background-color: #777777;
+        }
+        #timer {
+            font-size: 1.2em; /* Reduced from 1.5em */
+            margin-top: 20px;
+            color: #000000; /* Changed text color to black */
+            font-weight: bold; /* Make text bolder */
+        }
+        #loading {
+            display: none;
+            font-size: 1.2em; /* Reduced from 1.5em */
+            margin-top: 20px;
+            color: #000000; /* Changed text color to black */
+        }
+        #header-select, #timer-select {
+            font-size: 1em; /* Reduced from 1.2em */
+            padding: 8px; /* Adjusted padding for balance */
+            margin: 20px auto; /* Center the selects horizontally */
+            background: linear-gradient(to bottom, #eeeeee, #cccccc); /* Match background */
+            border: 1px solid #cccccc;
+            border-radius: 10px; /* Smooth rounded corners */
+            width: 150px; /* Set a specific width */
+            display: block; /* Make sure it takes the margin auto */
+            color: #000000; /* Changed text color to black */
+        }
+        #logo {
+            width: 150px; /* Adjust the width to make the image larger */
+            margin: 20px auto; /* Center the image horizontally */
+        }
+        #telegram-link {
+            margin-top: auto; /* Push the link to the bottom */
+            margin-bottom: 20px; /* Add some spacing at the bottom */
+            color: #0000EE; /* Default link color */
+            text-decoration: none;
+            font-size: 1em;
+        }
+        #telegram-link:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+    </style>
+    <script>
+        let timerInterval;
+        let timerDuration = 60; // Default to 1 minute
+
+        function getRandomForecast() {
+            const randomValue = Math.random();
+            return randomValue < 0.5 ? "DOWN" : "UP";
+        }
+
+        function displayForecast() {
+            const forecastElement = document.getElementById('forecast');
+            const loadingElement = document.getElementById('loading');
+
+            // Show loading sign
+            loadingElement.style.display = 'block';
+            forecastElement.textContent = '';
+
+            setTimeout(() => {
+                const forecast = getRandomForecast();
+                forecastElement.textContent = forecast;
+                forecastElement.className = forecast === "UP" ? 'up' : 'down';
+                
+                // Hide loading sign
+                loadingElement.style.display = 'none';
+                
+                startTimer();
+            }, 800); // Delay of 0.8 seconds
+        }
+
+        function startTimer() {
+            let timeLeft = timerDuration;
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = `Next signal available in ${timeLeft} seconds`;
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft -= 1;
+                timerElement.textContent = `Next signal available in ${timeLeft} seconds`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = "Press the button to get future signals!";
+                }
+            }, 1000);
+        }
+
+        function buttonClickHandler() {
+            const timerElement = document.getElementById('timer');
+            if (!timerInterval || !timerElement.textContent.includes('Next signal available')) {
+                displayForecast();
+            }
+        }
+
+        function updateHeader() {
+            const headerSelect = document.getElementById('header-select');
+            const header = document.getElementById('header');
+            header.textContent = headerSelect.value;
+        }
+
+        function updateTimerDuration() {
+            const timerSelect = document.getElementById('timer-select');
+            timerDuration = parseInt(timerSelect.value) * 60; // Convert minutes to seconds
+        }
+    </script>
+</head>
+<body>
+    <img id="logo" src="images/tob.png" alt="Logo">
+    <h1 id="header">Crypto IDX Signals</h1>
+    <select id="header-select" onchange="updateHeader()">
+        <option value="Crypto IDX Signals">Crypto IDX </option>
+        <option value="AUD/CAD Signals">AUD/CAD </option>
+        <option value="AUD/USD Signals">AUD/USD </option>
+        <option value="AUD/JPY Signals">AUD/JPY </option>
+        <option value="EUR/USD Signals">EUR/USD </option>
+        <option value="Altcoin IDX Signals">Altcoin IDX </option>
+    </select>
+    <select id="timer-select" onchange="updateTimerDuration()">
+        <option value="1">1 minute </option>
+        <option value="2">2 minutes </option>
+        <option value="5">5 minutes </option>
+        <option value="15">15 minutes </option>
+        <option value="30">30 minutes </option>
+    </select>
+    <div id="forecast">Press the button to get future signals!</div>
+    <button onclick="buttonClickHandler()">Get Signals</button>
+    <div id="timer">Press the button to get future signals!</div>
+    <div id="loading">Loading...</div>
+    <a id="telegram-link" href="https://t.me/tradingduo2" target="_blank">Telegram channel</a>
+</body>
+</html>
